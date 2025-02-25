@@ -7,7 +7,6 @@ from model_utils import prediction_model
 from components import progress_bar, update_video
 from styles import page_setup, page_with_webcam_video
 
-# Print timestamp (for debugging)
 print(datetime.datetime.now())
 
 # Initialize page state and camera
@@ -18,14 +17,13 @@ if "page" not in st.session_state or st.session_state["page"] != "learnpage":
 else:
     cap = cv2.VideoCapture(cv2.CAP_DSHOW)
 
-# Database connection (if used)
+# Database connection (if needed)
 conn = sqlite3.connect("signlingo.db")
 c = conn.cursor()
 
-# (No current_user; using "demo" as placeholder for DB insertion)
+# (No user session; using "demo" as a placeholder if inserting into DB)
 st.markdown(page_setup(), unsafe_allow_html=True)
 st.markdown(page_with_webcam_video(), unsafe_allow_html=True)
-
 
 if "alphabet" not in st.session_state:
     st.session_state["alphabet"] = 0
@@ -38,19 +36,20 @@ ALPHABET_LIST = {
 }
 NUM_ALPHABETS = len(ALPHABET_LIST)
 
+# Set up two columns: one for the video instruction and one for the webcam feed
 col1, col2 = st.columns([0.5, 0.5])
 with col1:
-    video_placeholder = st.empty()  # Displays the instructional video
+    video_placeholder = st.empty()  # Instructional video
     video_placeholder.markdown(
         update_video(ALPHABET_LIST[st.session_state["alphabet"]]),
         unsafe_allow_html=True,
     )
 with col2:
-    webcam_placeholder = st.empty()  # Shows live webcam feed
+    webcam_placeholder = st.empty()  # Live webcam feed
 
 progress_bar_placeholder = st.empty()
 
-# Continuous capture loop
+# Continuous loop to capture and process webcam frames
 while True and st.session_state["page"] == "learnpage":
     if cap is not None and cap.isOpened():
         ret, frame = cap.read()
@@ -66,7 +65,7 @@ while True and st.session_state["page"] == "learnpage":
             st.balloons()
             video_placeholder.empty()
             try:
-                # Insert into Alphabet table using "demo" as username
+                # Insert into Alphabet table (using "demo" as username)
                 c.execute(
                     """INSERT INTO Alphabet (username, letter) VALUES (?, ?)""",
                     ("demo", character),
