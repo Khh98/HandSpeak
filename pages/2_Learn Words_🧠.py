@@ -5,7 +5,6 @@ import sqlite3
 from model_utils import prediction_model
 from components import progress_bar, update_video, detected_word
 from styles import page_setup, page_with_webcam_video
-
 # Initialize page state and camera
 if "page" not in st.session_state or st.session_state["page"] != "wordpage":
     cv2.destroyAllWindows()
@@ -20,6 +19,7 @@ c = conn.cursor()
 
 st.markdown(page_setup(), unsafe_allow_html=True)
 st.markdown(page_with_webcam_video(), unsafe_allow_html=True)
+st.markdown(horizontal_menu(), unsafe_allow_html=True)
 
 if "word" not in st.session_state:
     st.session_state["word"] = 0
@@ -33,14 +33,14 @@ NUM_WORD = len(WORD_LIST)
 
 col1, col2 = st.columns([0.5, 0.5])
 with col1:
-    video_placeholder = st.empty()
+    video_placeholder = st.empty()  # Instructional video for the current letter
     video_placeholder.markdown(
         update_video(WORD_LIST[st.session_state["word"]][st.session_state["index"]]),
         unsafe_allow_html=True,
     )
     matched_placeholder = st.empty()
 with col2:
-    webcam_placeholder = st.empty()
+    webcam_placeholder = st.empty()  # Live webcam feed
     progress_bar_placeholder = st.empty()
 
 while True and st.session_state["page"] == "wordpage":
@@ -63,6 +63,7 @@ while True and st.session_state["page"] == "wordpage":
             st.session_state["index"] += 1
             if st.session_state["index"] == len(current_word):
                 try:
+                    # Insert into Words table (using "demo" as username)
                     c.execute(
                         """INSERT INTO Words (username, word) VALUES (?, ?)""",
                         ("demo", current_word),
