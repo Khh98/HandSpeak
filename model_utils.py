@@ -41,27 +41,13 @@ action_dirs = [
     ["A", "C", "G", "H", "I", "J", "N", "O", "U", "V", "W", "X"],
 ]
 
-# Define the base directory where models are stored
-base_dir = r"C:\Users\karim\OneDrive\Desktop\Streamlit Apps\asl-streamlit-signlingo-master\asl_detection_models"
-model_path = os.path.join(base_dir, "model1.p")
 
-# Load model and check metadata
-with open(model_path, "rb") as f:
-    model_data = pickle.load(f)
-
-if hasattr(model_data["model"], "__module__"):
-    print("Model was trained with:", model_data["model"].__module__)
-if hasattr(model_data["model"], "__version__"):
-    print("scikit-learn version used:", model_data["model"].__version__)
-else:
-    print("No version info found in the pickle file.")
-# Load models using absolute paths
 models = [
-    pickle.load(open(os.path.join(base_dir, "model1.p"), "rb"))["model"],
-    pickle.load(open(os.path.join(base_dir, "model2.p"), "rb"))["model"],
-    pickle.load(open(os.path.join(base_dir, "model3.p"), "rb"))["model"],
+    pickle.load(open("./asl_detection_models/model1.p", "rb"))["model"],
+    pickle.load(open("./asl_detection_models/model2.p", "rb"))["model"],
+    pickle.load(open("./asl_detection_models/model3.p", "rb"))["model"],
 ]
-thresholds = [0.75, 0.7, 0.7]
+
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
