@@ -19,7 +19,7 @@ c = conn.cursor()
 
 st.markdown(page_setup(), unsafe_allow_html=True)
 st.markdown(page_with_webcam_video(), unsafe_allow_html=True)
-st.markdown(horizontal_menu(), unsafe_allow_html=True)
+
 
 if "word" not in st.session_state:
     st.session_state["word"] = 0
