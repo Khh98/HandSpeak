@@ -25,7 +25,7 @@ c = conn.cursor()
 # (No current_user; using "demo" as placeholder for DB insertion)
 st.markdown(page_setup(), unsafe_allow_html=True)
 st.markdown(page_with_webcam_video(), unsafe_allow_html=True)
-st.markdown(horizontal_menu(), unsafe_allow_html=True)
+
 
 if "alphabet" not in st.session_state:
     st.session_state["alphabet"] = 0
